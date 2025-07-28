@@ -32,7 +32,17 @@ const AnimatedButton = ({ children, onClick, variant = 'primary', size = 'md' })
       onClick={onClick}
       onMouseDown={() => setIsPressed(true)}
       onMouseUp={() => setIsPressed(false)}
-      onMouseLeave={() => setIsPressed(false)}
+      onMouseLeave={(e) => {
+        setIsPressed(false);
+        if (!isPressed) {
+          e.target.style.transform = 'scale(1)';
+          e.target.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.3)';
+        }
+      }}
+      onMouseEnter={(e) => {
+        e.target.style.transform = 'scale(1.02)';
+        e.target.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.4)';
+      }}
       style={{
         ...variants[variant],
         ...sizes[size],
@@ -46,16 +56,6 @@ const AnimatedButton = ({ children, onClick, variant = 'primary', size = 'md' })
           : '0 4px 8px rgba(0, 0, 0, 0.3)',
         position: 'relative',
         overflow: 'hidden'
-      }}
-      onMouseEnter={(e) => {
-        e.target.style.transform = 'scale(1.02)';
-        e.target.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.4)';
-      }}
-      onMouseLeave={(e) => {
-        if (!isPressed) {
-          e.target.style.transform = 'scale(1)';
-          e.target.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.3)';
-        }
       }}
     >
       <span style={{ position: 'relative', zIndex: 1 }}>
