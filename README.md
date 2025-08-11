@@ -1,29 +1,24 @@
-npm run dev
-cd backend
-npm install
-npm run dev
+Riser: Flood Monitoring and Alert System
 
-Flood Monitoring and Alert System for the Philippines
+Riser is a real-time flood monitoring and alert system for the Philippines. It provides live weather, flood, traffic, and transport data, with a modern React UI and GIS map view. The system is designed for reliability, accessibility, and future expandability (including ML integration).
 
-Features:
+Features
 - Real-time weather and flood data (PAGASA, NOAH, OpenWeatherMap, NOAA)
-- GIS map view of flood-prone areas
-- Live alerts and notifications
+- GIS map view of flood-prone and affected areas
+- Live alerts and notifications (email/SMS)
 - Search by location
-- Modern React UI (Vite)
+- Modern, senior-friendly React UI (Vite)
+- Responsive and accessible design
+- Expandable for future ML models and new data sources
 
-Getting Started:
-Frontend:
-npm run dev
+Live site: https://summergbrl.github.io/riser
 
-Backend:
-cd backend
-npm install
-npm run dev
+Project Structure
+- `src/` — React frontend
+- `backend/` — Node.js/Express backend
+- `public/` — Static assets
+- `mobile/` — (Optional) React Native/Flutter mobile app
 
-Database:
-See backend/schema.sql for PostgreSQL setup
-
-Expandability:
-- Add ML models for flood prediction in backend/src/services
-- Add more data sources/APIs in backend/src/services/dataSources.js
+## Expandability
+- Add ML models for flood prediction in `backend/src/services`
+- Add more data sources/APIs in `backend/src/services/dataSources.js`
