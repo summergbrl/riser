@@ -7,7 +7,7 @@ import PulseIndicator from './components/PulseIndicator';
 import AnimatedButton from './components/AnimatedButton';
 import FloatingAlert from './components/FloatingAlert';
 
-const defaultPosition = [14.5995, 120.9842]; // Manila
+const defaultPosition = [14.5995, 120.9842];
 
 function App() {
   const [search, setSearch] = useState('');
@@ -22,7 +22,6 @@ function App() {
   const [lastUpdate, setLastUpdate] = useState(null);
 
   useEffect(() => {
-    // Socket.IO connection for real-time updates
     const socket = io('http://localhost:4000');
     
     socket.on('connect', () => setIsOnline(true));
@@ -56,7 +55,6 @@ function App() {
         setAlerts(newAlerts);
         setLastUpdate(new Date().toLocaleTimeString());
         
-        // Show floating alert for high risk areas
         const highRiskAreas = newAlerts.filter(alert => alert.risk === 'high' || alert.risk === 'critical');
         if (highRiskAreas.length > 0) {
           const alertId = Date.now();
@@ -71,13 +69,11 @@ function App() {
     
     socket.on('weather', setWeather);
     
-    // Listen for highway traffic updates
     socket.on('traffic', (data) => {
       if (data.highways) {
         setHighways(data.highways);
         setLastUpdate(new Date().toLocaleTimeString());
         
-        // Show floating alert for closed highways
         const closedHighways = data.highways.filter(h => h.status === 'not-passable');
         if (closedHighways.length > 0) {
           const alertId = Date.now();
@@ -88,7 +84,6 @@ function App() {
           }]);
         }
         
-        // Show floating alert for heavy traffic
         const heavyTrafficHighways = data.highways.filter(h => h.traffic === 'heavy');
         if (heavyTrafficHighways.length > 0) {
           const alertId = Date.now() + 1;
@@ -101,12 +96,10 @@ function App() {
       }
     });
 
-    // Listen for public transport updates
     socket.on('transport', (data) => {
       setTransport(data);
       setLastUpdate(new Date().toLocaleTimeString());
       
-      // Show alerts for transport issues
       if (data.mrt) {
         const downLines = Object.entries(data.mrt).filter(([_, line]) => line.status === 'maintenance');
         if (downLines.length > 0) {
@@ -120,7 +113,6 @@ function App() {
       }
     });
     
-    // Listen for real-time notifications
     socket.on('notification', (notification) => {
       setNotifications(prev => [notification, ...prev.slice(0, 4)]);
     });
@@ -128,7 +120,6 @@ function App() {
     return () => socket.disconnect();
   }, []);
 
-  // Initialize sample highway data with exits/entrances
   useEffect(() => {
     setHighways([
       { 
@@ -269,7 +260,6 @@ function App() {
       fontSize: '16px',
       color: '#e5e5e5'
     }}>
-      {/* Minimalist Header */}
       <div style={{ 
         background: '#2a2a2a',
         borderBottom: '1px solid #404040',
@@ -310,12 +300,11 @@ function App() {
         </div>
       </div>
 
-      <div className="container-padding" style={{ 
+      <div style={{ 
         maxWidth: 1200, 
         margin: '0 auto', 
         padding: '20px'
       }}>
-        {/* System Status Bar */}
         <div style={{
           background: '#2a2a2a',
           border: '1px solid #404040',
@@ -357,7 +346,6 @@ function App() {
           </div>
         </div>
 
-        {/* Emergency Banner */}
         {alerts.some(alert => alert.risk === 'critical' || alert.risk === 'high') && (
           <div style={{
             background: '#dc2626',
@@ -374,23 +362,13 @@ function App() {
           </div>
         )}
 
-        {/* Main Content Grid */}
         <div className="grid-container" style={{ 
           display: 'grid', 
-          gridTemplateColumns: '350px 1fr', 
-          gap: '20px',
-          alignItems: 'start'
+          gridTemplateColumns: '1fr 2fr', 
+          gap: '20px'
         }}>
-          {/* Left Sidebar */}
-          <div className="sidebar-sticky" style={{ 
-            display: 'flex', 
-            flexDirection: 'column', 
-            gap: '16px',
-            position: 'sticky',
-            top: '20px'
-          }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             
-            {/* Search Box */}
             <GlowCard glowColor="#3b82f6">
               <input
                 type="text"
@@ -410,7 +388,6 @@ function App() {
               />
             </GlowCard>
 
-            {/* Weather Info */}
             {weather && (
               <GlowCard glowColor="#f59e0b">
                 <div style={{ fontSize: '14px', color: '#a0a0a0', marginBottom: '8px' }}>
@@ -425,7 +402,6 @@ function App() {
               </GlowCard>
             )}
 
-            {/* Flood Alerts */}
             <GlowCard glowColor={alerts.some(a => a.risk === 'high') ? '#dc2626' : '#10b981'}>
               <div style={{ fontSize: '14px', color: '#a0a0a0', marginBottom: '12px' }}>
                 Flood Status
@@ -479,7 +455,6 @@ function App() {
               )}
             </GlowCard>
 
-            {/* Highway Traffic Status */}
             <GlowCard glowColor="#3b82f6">
               <div style={{ fontSize: '14px', color: '#a0a0a0', marginBottom: '12px' }}>
                 Highway Traffic
@@ -491,7 +466,6 @@ function App() {
                               h.fullName.toLowerCase().includes(search.toLowerCase()))
                   .map((highway, idx) => (
                     <div key={idx}>
-                      {/* Main Highway Row */}
                       <div 
                         style={{ 
                           padding: '8px',
@@ -656,8 +630,10 @@ function App() {
                   ))}
               </div>
             </GlowCard>
+          </div>
 
-            {/* Public Transport Status */}
+          {/* Public Transport Status */}
+          <div style={{ marginBottom: '20px' }}>
             <GlowCard glowColor="#8b5cf6">
               <div style={{ 
                 fontSize: '14px', 
@@ -751,19 +727,17 @@ function App() {
             </GlowCard>
           </div>
 
-          {/* Right Side - Main Content */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            {/* Affected Areas List */}
-            <GlowCard glowColor="#3b82f6">
-              <div style={{ 
-                fontSize: '14px', 
-                color: '#a0a0a0', 
-                marginBottom: '16px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between'
-              }}>
-                <span>Metro Manila Flood Status</span>
+          {/* Affected Areas List */}
+          <GlowCard glowColor="#3b82f6">
+            <div style={{ 
+              fontSize: '14px', 
+              color: '#a0a0a0', 
+              marginBottom: '16px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between'
+            }}>
+              <span>Affected Areas</span>
               <div style={{ display: 'flex', gap: '12px', fontSize: '10px' }}>
                 <span style={{ color: '#dc2626', display: 'flex', alignItems: 'center', gap: '4px' }}>
                   <PulseIndicator color="#dc2626" size={4} isActive={true} /> Critical/High Risk
@@ -792,12 +766,9 @@ function App() {
                 top: '10px',
                 left: '10px',
                 fontSize: '12px',
-                color: '#a0a0a0',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px'
+                color: '#a0a0a0'
               }}>
-                🗺️ Metro Manila Cities Overview
+                Metro Manila Flood Map
               </div>
               
               {/* Simple visual representation */}
@@ -876,7 +847,6 @@ function App() {
               </div>
             </div>
 
-            {/* Detailed List */}
             <div>
               <div style={{ fontSize: '14px', color: '#a0a0a0', marginBottom: '12px' }}>
                 Detailed Status
@@ -995,7 +965,6 @@ function App() {
               )}
             </div>
           </GlowCard>
-          </div>
 
         </div>
 
@@ -1062,27 +1031,9 @@ function App() {
           }
         }
         
-        @media (max-width: 1024px) {
-          .grid-container {
-            grid-template-columns: 300px 1fr !important;
-            gap: 16px !important;
-          }
-        }
-        
         @media (max-width: 768px) {
           .grid-container {
             grid-template-columns: 1fr !important;
-            gap: 16px !important;
-          }
-          
-          .sidebar-sticky {
-            position: static !important;
-          }
-        }
-        
-        @media (max-width: 480px) {
-          .container-padding {
-            padding: 12px !important;
           }
         }
       `}</style>
