@@ -1,0 +1,3 @@
+<!-- Use this file to provide workspace-specific custom instructions to Copilot. For more details, visit https://code.visualstudio.com/docs/copilot/copilot-customization#_use-a-githubcopilotinstructionsmd-file -->
+
+This project is a flood monitoring and alert system for the Philippines. Backend: Node.js (Express), PostgreSQL, modular architecture, API integrations for PAGASA, DOST-Project NOAH, OpenWeatherMap, NOAA. Frontend: React (web), clean modern UI, GIS map view, search, notifications. Includes basic web scraping and NLP module for flood-related news/social posts. Real-time updates, scalable structure, ready for future ML integration.
